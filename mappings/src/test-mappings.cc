@@ -3,10 +3,9 @@
 #include <iostream>
 #include "meta/mappings.h"
 
-int main(int, char * argv[])
+int main(int, char * [])
 {
-  std::cout << "Hello, there! Good news: "
-            << argv[0]+2 << " works!"
-            << std::endl;
+  // Test All
+  static_assert(Mapping<3ul, 5ul>::All::value_of<2, 2>(), "test All");
   return 0;
 }

@@ -69,12 +69,12 @@ debug: $(EXEC)
 
 $(EXEC): %: $(BUILD_DIR)/%.o $(AUX_OBJS)
 	(cat $(GITIGNORE) | grep -xq $@) || echo "$@" >> $(GITIGNORE)
-	$(CC) -o $@ $+ $(LIB)
+	$(C) -o $@ $+ $(LIB)
 
 # Build object files from sources
 $(OBJS): $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cc $(HEADERS)
 	mkdir -p $(patsubst %/$(lastword $(subst /, ,$@)),%,$@)
-	$(CC) -I$(SRC_DIR) -c $(word 1,$+) -o $@
+	$(C) -I$(SRC_DIR) -c $(word 1,$+) -o $@
 
 # Remove all Emacs temporary files, objects and executable
 clean:
