@@ -43,7 +43,7 @@ template<template<size_t, size_t> class Functor,
          size_t rows_no, size_t cols_no, size_t crt_row, size_t crt_col>
 struct _For {
   static void iterate() {
-    Functor<crt_row, cols_no>::apply();
+    Functor<crt_row, crt_col>::apply();
     _For<Functor, rows_no, cols_no, crt_row, crt_col + 1>::iterate();
   }
 };

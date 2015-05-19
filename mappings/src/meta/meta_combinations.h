@@ -1,7 +1,12 @@
+// Copyright (C) 2015 Tudor Berariu
+
 #ifndef META_MATH_H
 #define META_MATH_H
 
 #include <cstddef>
+#include <iostream>
+
+using namespace std;
 
 template<size_t n, size_t k>
 struct _Combinations;
@@ -14,6 +19,13 @@ struct _Combinations<0, 0> {
   struct Ith_elem_in_Jth {
     static constexpr bool exists();
   };
+
+  template<size_t i, size_t j>
+  struct PrintElements {
+    static void apply();
+    static void end_row();
+    static void end();
+  };
 };
 
 template<size_t n>
@@ -24,6 +36,12 @@ struct _Combinations<n, 0> {
   struct Ith_elem_in_Jth {
     static constexpr bool exists();
   };
+  template<size_t i, size_t j>
+  struct PrintElements {
+    static void apply();
+    static void end_row();
+    static void end();
+  };
 };
 
 template<size_t n>
@@ -33,6 +51,12 @@ struct _Combinations<n, n> {
   template<size_t i, size_t j>
   struct Ith_elem_in_Jth {
     static constexpr bool exists();
+  };
+  template<size_t i, size_t j>
+  struct PrintElements {
+    static void apply();
+    static void end_row();
+    static void end();
   };
 };
 
@@ -51,6 +75,12 @@ struct _Combinations {
   template<size_t i, size_t j>
   struct Ith_elem_in_Jth {
     static constexpr bool exists();
+  };
+  template<size_t i, size_t j>
+  struct PrintElements {
+    static void apply();
+    static void end_row();
+    static void end();
   };
 };
 
@@ -130,6 +160,25 @@ constexpr bool _Cond<false, n, k, i, j>::exists() {
   using __IJ = typename __C::template
                 Ith_elem_in_Jth<i-1, j- _Combinations<n-1, k-1>::count()>;
   return __IJ::exists();
+}
+
+
+template<size_t n, size_t k>
+template<size_t i, size_t j>
+void _Combinations<n, k>::PrintElements<i, j>::apply() {
+  cout << (Ith_elem_in_Jth<i, j>::exists() ? "X" : "_");
+}
+
+template<size_t n, size_t k>
+template<size_t i, size_t j>
+void _Combinations<n, k>::PrintElements<i, j>::end_row() {
+  cout << endl;
+}
+
+template<size_t n, size_t k>
+template<size_t i, size_t j>
+void _Combinations<n, k>::PrintElements<i, j>::end() {
+  cout << "Done!" << endl;
 }
 
 #endif

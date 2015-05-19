@@ -1,6 +1,7 @@
 // Copyright (C) 2015 Tudor Berariu
 
 #include "meta/meta_combinations.h"
+#include "meta/meta_iteration.h"
 
 int main(int, char*[]) {
   static_assert(_Combinations<5, 3>::count() == 10, "C(5,3) != 10");
@@ -25,5 +26,9 @@ int main(int, char*[]) {
                 "6th element in 4th combination of C(8,4)");
   static_assert(_Combinations<8, 4>::Ith_elem_in_Jth<7, 4>::exists(),
                 "7th element in 4th combination of C(8,4)");
+
+  For<_Combinations<8, 4>::PrintElements, 8, _Combinations<8, 4>::count()>
+      ::iterate();
+
   return 0;
 }
