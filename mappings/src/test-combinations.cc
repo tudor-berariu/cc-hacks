@@ -8,5 +8,22 @@ int main(int, char*[]) {
   static_assert(_Combinations<9, 6>::count() == 84, "C(9,6) != 84");
   static_assert(_Combinations<0, 0>::count() == 1, "C(0,0) != 1");
   static_assert(_Combinations<16, 11>::count() == 4368, "C(16,11) != 4368");
+
+  static_assert(_Combinations<8, 4>::Ith_elem_in_Jth<0, 4>::exists(),
+                "0th element in 4th combination of C(8,4)");
+  static_assert(_Combinations<8, 4>::Ith_elem_in_Jth<1, 4>::exists(),
+                "1st element in 4th combination of C(8,4)");
+  static_assert(_Combinations<8, 4>::Ith_elem_in_Jth<2, 4>::exists(),
+                "2nd element in 4th combination of C(8,4)");
+  static_assert(!_Combinations<8, 4>::Ith_elem_in_Jth<3, 4>::exists(),
+                "3rd element in 4th combination of C(8,4)");
+  static_assert(!_Combinations<8, 4>::Ith_elem_in_Jth<4, 4>::exists(),
+                "4th element in 4th combination of C(8,4)");
+  static_assert(!_Combinations<8, 4>::Ith_elem_in_Jth<5, 4>::exists(),
+                "5th element in 4th combination of C(8,4)");
+  static_assert(!_Combinations<8, 4>::Ith_elem_in_Jth<6, 4>::exists(),
+                "6th element in 4th combination of C(8,4)");
+  static_assert(_Combinations<8, 4>::Ith_elem_in_Jth<7, 4>::exists(),
+                "7th element in 4th combination of C(8,4)");
   return 0;
 }

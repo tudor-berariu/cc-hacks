@@ -8,3 +8,4 @@ build/*
 # Executables
 mappings
 test-mappings
+test-combinations
