@@ -63,7 +63,7 @@ struct ForwardComputation;
 
 template<typename T>
 struct ForwardComputation<T> {
-  static Matrix<T> compute(const Matrix<T>& m_in) {
+  inline static Matrix<T> compute(const Matrix<T>& m_in) {
     Matrix<T> m_out = m_in;
     return m_out;
   }
@@ -74,7 +74,7 @@ template<typename T, template<typename> class CrtLayer,
 struct ForwardComputation<T, CrtLayer, Layers...> {
   using Next = ForwardComputation<T, Layers...>;
 
-  static Matrix<T> compute(const Matrix<T>& m_in,
+  inline static Matrix<T> compute(const Matrix<T>& m_in,
                            const CrtLayer<T>& layer,
                            Layers<T>... other) {
     return Next::compute(layer.compute(m_in), other...);
