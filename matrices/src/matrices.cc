@@ -26,7 +26,7 @@
 using namespace std;
 
 template<typename T>
-struct Matrix;
+class Matrix;
 
 template<typename T>
 ostream& operator<<(ostream&, const Matrix<T>&);
@@ -39,6 +39,7 @@ class Matrix {
   T* at(size_t, size_t);
   T get(size_t, size_t) const;
   Matrix<T> operator*(const Matrix<T>&) const;
+  Matrix<T> operator+(const Matrix<T>&) const;
   void operator*=(T x);
   size_t get_rows_no() const;
   size_t get_cols_no() const;
@@ -48,12 +49,75 @@ class Matrix {
   template<typename T_>
   friend ostream& operator<<(ostream&, const Matrix<T_>&);
 
+  Matrix<T>& operator=(const Matrix<T>&);
+
   private:
   size_t rows_no;
   size_t cols_no;
 
   T* _values;
 };
+
+template<typename T, template<typename> class... layers>
+struct ForwardComputation;
+
+template<typename T>
+struct ForwardComputation<T> {
+  static Matrix<T> compute(const Matrix<T>& m_in) {
+    Matrix<T> m_out = m_in;
+    return m_out;
+  }
+};
+
+template<typename T, template<typename> class CrtLayer,
+         template<typename> class... Layers>
+struct ForwardComputation<T, CrtLayer, Layers...> {
+  using Next = ForwardComputation<T, Layers...>;
+
+  static Matrix<T> compute(const Matrix<T>& m_in,
+                           const CrtLayer<T>& layer,
+                           Layers<T>... other) {
+    return Next::compute(layer.compute(m_in), other...);
+  }
+};
+
+template<typename T>
+struct Multiplier {
+  Matrix<T> p;
+  Multiplier(size_t, size_t);
+  Matrix<T> compute(const Matrix<T>&) const;
+};
+
+template<typename T>
+Multiplier<T>::Multiplier(size_t rows_no, size_t cols_no)
+  : p(rows_no, cols_no) {
+  p.magic_init();
+}
+
+template<typename T>
+Matrix<T> Multiplier<T>::compute(const Matrix<T>& m_in) const {
+  Matrix<T> m3 = (m_in * p);
+  return m3;
+}
+
+template<typename T>
+struct Adder {
+  Matrix<T> p;
+  Adder(size_t, size_t);
+  Matrix<T> compute(const Matrix<T>&) const;
+};
+
+template<typename T>
+Adder<T>::Adder(size_t rows_no, size_t cols_no)
+  : p(rows_no, cols_no) {
+  p.magic_init();
+}
+
+template<typename T>
+Matrix<T> Adder<T>::compute(const Matrix<T>& m_in) const {
+  Matrix<T> m3 = (m_in + p);
+  return m3;
+}
 
 template<typename T>
 Matrix<T>::Matrix(size_t rows_no, size_t cols_no)
@@ -105,6 +169,18 @@ void Matrix<T>::operator*=(T x) {
 }
 
 template<typename T>
+Matrix<T> Matrix<T>::operator+(const Matrix<T>& b) const {
+  assert(rows_no == b.get_rows_no() && cols_no == b.get_cols_no());
+  Matrix<T> c(rows_no, b.get_cols_no());
+  for(size_t i = 0; i < rows_no; i++) {
+    for(size_t j = 0; j < b.get_cols_no(); j++) {
+      c[i][j] = this->get(i,j) + b.get(i,j);
+    }
+  }
+  return c;
+}
+
+template<typename T>
 Matrix<T> Matrix<T>::operator*(const Matrix<T>& b) const {
   assert(cols_no == b.get_rows_no());
   Matrix<T> c(rows_no, b.get_cols_no());
@@ -116,6 +192,19 @@ Matrix<T> Matrix<T>::operator*(const Matrix<T>& b) const {
     }
   }
   return c;
+}
+
+template<typename T>
+Matrix<T>& Matrix<T>::operator=(const Matrix<T>& source) {
+  rows_no = source.rows_no;
+  cols_no = source.cols_no;
+  _values = (T*) malloc(rows_no * cols_no * sizeof(T));
+  for(size_t r = 0; r < rows_no; r++) {
+    for(size_t c = 0; c < cols_no; c++) {
+      _values[r * cols_no + c] = source.get(r, c);
+    }
+  }
+  return *this;
 }
 
 template<typename T>
@@ -131,6 +220,7 @@ ostream& operator<<(ostream& s, const Matrix<T>& m) {
 
 int main(int argc, char * argv[])
 {
+  /*
   Matrix<int> m1(4, 6);
   Matrix<int> m2(6, 3);
 
@@ -147,6 +237,45 @@ int main(int argc, char * argv[])
   m1 *= 2;
 
   cout << m1;
+
+  Matrix<int> m4 = m1;
+
+  cout << m4;
+
+  Matrix<int> m5(3, 4);
+  Matrix<int> m6(3, 4);
+
+  m5.magic_init();
+  m6.magic_init();
+
+  Matrix<int> m7 = (m5 + m6);
+
+  cout << m7;
+  */
+
+  Multiplier<int> l1(4, 6);
+  Adder<int> l2(3, 6);
+  Multiplier<int> l3(6, 2);
+
+  using NN = ForwardComputation<int, Multiplier, Adder, Multiplier>;
+
+  Matrix<int> m_in(3,4);
+  m_in.magic_init();
+
+  Matrix<int> m_out = NN::compute(m_in, l1, l2, l3);
+  cout << m_out << endl;
+
+  // Testare
+  Matrix<int> _m_in(3,4);
+  _m_in.magic_init();
+  Matrix<int> _p1(4, 6);
+  _p1.magic_init();
+  Matrix<int> _p2(3, 6);
+  _p2.magic_init();
+  Matrix<int> _p3(6, 2);
+  _p3.magic_init();
+
+  cout << ((_m_in * _p1) + _p2) * _p3;
 
   return 0;
 }
