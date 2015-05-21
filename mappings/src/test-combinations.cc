@@ -34,5 +34,10 @@ int main(int, char*[]) {
   For<MappingsPrinter<5, 2, 3, 4, 5>::Iterator,
       5,
       Combinations<2,3,4,5>::template out_maps_no<5>()>::iterate();
+  cout << Sequences<2,3,4,5>::template out_maps_no<5>() << " total maps"
+       << endl;
+  For<SequencesPrinter<6, 1, 2, 3, 4, 5, 6>::Iterator,
+      6,
+      Sequences<1,2,3,4,5,6>::template out_maps_no<6>()>::iterate();
   return 0;
 }

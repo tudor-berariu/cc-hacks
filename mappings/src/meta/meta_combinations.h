@@ -1,7 +1,7 @@
 // Copyright (C) 2015 Tudor Berariu
 
-#ifndef META_MATH_H
-#define META_MATH_H
+#ifndef META_COMBINATIONS_H
+#define META_COMBINATIONS_H
 
 #include <cstddef>
 #include <iostream>
