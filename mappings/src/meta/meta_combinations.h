@@ -22,9 +22,9 @@ struct _Combinations<0, 0> {
 
   template<size_t i, size_t j>
   struct PrintElements {
-    static void apply();
-    static void end_row();
-    static void end();
+    static inline void apply();
+    static inline void end_row();
+    static inline void end();
   };
 };
 
@@ -38,9 +38,9 @@ struct _Combinations<n, 0> {
   };
   template<size_t i, size_t j>
   struct PrintElements {
-    static void apply();
-    static void end_row();
-    static void end();
+    static inline void apply();
+    static inline void end_row();
+    static inline void end();
   };
 };
 
@@ -54,9 +54,9 @@ struct _Combinations<n, n> {
   };
   template<size_t i, size_t j>
   struct PrintElements {
-    static void apply();
-    static void end_row();
-    static void end();
+    static inline void apply();
+    static inline void end_row();
+    static inline void end();
   };
 };
 
@@ -78,9 +78,9 @@ struct _Combinations {
   };
   template<size_t i, size_t j>
   struct PrintElements {
-    static void apply();
-    static void end_row();
-    static void end();
+    static inline void apply();
+    static inline void end_row();
+    static inline void end();
   };
 };
 

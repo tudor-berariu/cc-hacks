@@ -1,5 +1,6 @@
 // Copyright (C) 2015 Tudor Berariu
 
+#include "meta/mappings.h"
 #include "meta/meta_combinations.h"
 #include "meta/meta_iteration.h"
 
@@ -30,5 +31,8 @@ int main(int, char*[]) {
   For<_Combinations<8, 4>::PrintElements, 8, _Combinations<8, 4>::count()>
       ::iterate();
 
+  For<MappingsPrinter<5, 2, 3, 4, 5>::Iterator,
+      5,
+      Combinations<2,3,4,5>::template out_maps_no<5>()>::iterate();
   return 0;
 }
