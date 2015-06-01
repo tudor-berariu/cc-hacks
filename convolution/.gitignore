@@ -1,0 +1,11 @@
+# Emacs backup and temporary files
+*~
+\#*#
+
+# Build directory
+build/*
+
+# Executables
+convolution
+test_convolution
+test_convolution2
