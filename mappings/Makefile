@@ -24,7 +24,7 @@ SHELL := /bin/sh
 
 # compile options
 CC := gcc
-CCFLAGS := -Wall -std=c++0x -Ofast
+CCFLAGS := -Wall -std=c++0x -Ofast -ftemplate-depth=900
 LIBS :=
 LIBSTD := -lstdc++
 LIBMMGTK := #`pkg-config gtkmm-3.0 --cflags --libs`

@@ -25,10 +25,11 @@ SHELL := /bin/sh
 # compile options
 CC := gcc
 CCFLAGS := -Wall -std=c++0x -Ofast
-LIBS :=
+LIBS := -lm -lopenblas
+BLAS := -I/usr/local/opt/openblas/include -L/usr/local/opt/openblas/lib
 LIBSTD := -lstdc++
 LIBMMGTK := #`pkg-config gtkmm-3.0 --cflags --libs`
-LIB := $(LIBS) $(LIBMMGTK) $(LIBSTD)
+LIB := $(BLAS) $(LIBS) $(LIBMMGTK) $(LIBSTD)
 
 ifeq ($(MAKECMDGOALS),debug)
 override CCFLAGS := -g -O0 $(CCFLAGS)
@@ -36,10 +37,10 @@ else
 override CCFLAGS := -Ofast $(CCFLAGS)
 endif
 
-LIBBLAS := `pkg-config atlas --libs`	
-CCFLAGS_BLAS := `pkg-config atlas --cflags`
+#LIBBLAS := `pkg-config atlas --libs`	
+#CCFLAGS_BLAS := `pkg-config atlas --cflags`
 
-C := $(CC) $(CCFLAGS) $(LIBBLAS) $(CCFLAGS_BLAS)
+C := $(CC) $(CCFLAGS) $(BLAS)
 
 # git
 GITIGNORE=.gitignore

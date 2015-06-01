@@ -33,7 +33,7 @@ ostream& operator<<(ostream&, const Matrix<T>&);
 
 template<typename T>
 class Matrix {
-  public:
+public:
   Matrix(size_t, size_t);
   T* operator[](size_t);
   T* at(size_t, size_t);
@@ -51,7 +51,7 @@ class Matrix {
 
   Matrix<T>& operator=(const Matrix<T>&);
 
-  private:
+private:
   size_t rows_no;
   size_t cols_no;
 
@@ -119,6 +119,9 @@ Matrix<T> Adder<T>::compute(const Matrix<T>& m_in) const {
   return m3;
 }
 
+// Constructor
+// Sets cols_no and rows_no
+// and allocaties memory
 template<typename T>
 Matrix<T>::Matrix(size_t rows_no, size_t cols_no)
   : rows_no {rows_no}, cols_no {cols_no} { 
